@@ -36,7 +36,29 @@ app.get("/", (req, res) => {
   });
 });
 
+// API Routes
 app.use("/api/auth", require("./authRoutes"));
+app.use("/api/appointments", require("./appointmentsRoutes"));
+app.use("/api/prescriptions", require("./prescriptionsRoutes"));
+app.use("/api/records", require("./recordsRoutes"));
+app.use("/api/doctors", require("./doctorsRoutes"));
+app.use("/api/patients", require("./patientsRoutes"));
+app.use("/api/dashboard", require("./dashboardRoutes"));
+app.use("/api/chatbot", require("./chatbotRoutes"));
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    message: "Something went wrong!",
+    error: process.env.NODE_ENV === "development" ? err.message : undefined
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
